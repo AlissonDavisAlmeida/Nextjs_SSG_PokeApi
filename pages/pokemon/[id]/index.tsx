@@ -1,8 +1,10 @@
 import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import {  useEffect, useState } from "react";
 import { pokeAPI } from "../../../api";
 import { Layout } from "../../../components/layouts";
 import { Pokemon } from "../../../interfaces/pokemon_full";
+import { existsPokemonInFavorites, toogleFavorite } from "../../../utils";
 
 interface Props {
     pokemon?: Pokemon
@@ -11,59 +13,71 @@ interface Props {
 
 const PokemonDetail: NextPage<Props> = ({ pokemon }) => {
 
+    const [isInFavorite, setisInFavorite] = useState(existsPokemonInFavorites(pokemon?.id!));
+
+    const onSaveOrRemoveInFavorites = () => {
+        toogleFavorite(pokemon?.id!)
+        setisInFavorite(!isInFavorite);
+    }
+
 
     return (
-        <Layout>
+        <Layout title={pokemon?.name}>
             <Grid.Container css={{
                 margin: "5px"
             }}
                 gap={2}
             >
-                <Grid xs={12} sm={6} md={4} xl={2}>
+                <Grid xs={12} sm={6} md={6}>
                     <Card isHoverable css={{ padding: "30px" }}>
                         <Card.Body >
                             <Card.Image src={pokemon?.sprites.other?.dream_world.front_default || ""}
                                 objectFit="cover"
-                                width="100%" 
+                                width="100%"
                                 alt={"pokemon"}
-                                />
+                            />
                         </Card.Body>
                     </Card>
                 </Grid>
 
-                <Grid xs={12} sm={8}>
-                    <Card >
-                        <Card.Header css={{display:"flex", justifyContent:"space-between"}}>
+                <Grid xs={12} sm={6} >
+                    <Card css={{ padding: "20px" }}>
+
+
+                        <Card.Header css={{ display: "flex", justifyContent: "space-between", "@mdMax": { flexDirection: "column" } }}>
                             <Text h1 transform="capitalize">{pokemon?.name}</Text>
                             <Button
+                            
                                 color={"gradient"}
-                                ghost
+                                ghost={!isInFavorite}
+                                onPress={onSaveOrRemoveInFavorites}
                             >
-                                Save in Favorites
+                                {isInFavorite ? "Remove from favorites" : "Save in favorites"}
                             </Button>
                         </Card.Header>
+
                         <Card.Body>
                             <Text size={30}>Sprites:</Text>
                             <Container direction="row" display="flex" gap={0}>
-                                <Image 
+                                <Image
                                     src={pokemon?.sprites.front_default || ""}
                                     alt={pokemon?.name}
                                     width={100}
                                     height={100}
                                 />
-                                <Image 
+                                <Image
                                     src={pokemon?.sprites.back_default || ""}
                                     alt={pokemon?.name}
                                     width={100}
                                     height={100}
                                 />
-                                <Image 
+                                <Image
                                     src={pokemon?.sprites.front_shiny || ""}
                                     alt={pokemon?.name}
                                     width={100}
                                     height={100}
                                 />
-                                <Image 
+                                <Image
                                     src={pokemon?.sprites.back_shiny || ""}
                                     alt={pokemon?.name}
                                     width={100}
