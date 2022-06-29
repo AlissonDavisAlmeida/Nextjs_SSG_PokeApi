@@ -1,4 +1,4 @@
-import { Card, Grid } from "@nextui-org/react";
+import { Grid } from "@nextui-org/react";
 import FavoriteCardPokemon from "./FavoriteCardPokemon";
 
 interface Props {
@@ -14,7 +14,7 @@ function FavoritePokemons({ favoritePokemons }: Props) {
                 <Grid.Container gap={2} direction="row" justify="flex-start">
                     {
                         favoritePokemons.map(id => (
-                            <FavoriteCardPokemon pokemonId={id}/>
+                            <FavoriteCardPokemon key={id} pokemonId={id} />
                         ))
                     }
                 </Grid.Container>
