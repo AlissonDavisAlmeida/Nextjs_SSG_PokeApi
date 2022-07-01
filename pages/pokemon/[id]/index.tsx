@@ -25,9 +25,9 @@ const PokemonDetail: NextPage<Props> = ({ pokemon }) => {
             particleCount: 100,
             spread: 160,
             angle: -100,
-            origin:{
-                x:1,
-                y:0
+            origin: {
+                x: 1,
+                y: 0
             }
         })
 
@@ -116,18 +116,30 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
         paths: [
             ...pokemon151.map((id) => ({ params: { id } }))
         ],
-        fallback: false
+        fallback: "blocking"
     }
 }
+
+
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
     const pokemon = await getStaticPoke(context.params?.id!);
 
+    if(!pokemon) {
+        return {
+            redirect:{
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+
     return {
         props: {
             pokemon
-        }
+        },
+        revalidate: 86400
     }
 }
 

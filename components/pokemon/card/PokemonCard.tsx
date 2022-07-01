@@ -12,7 +12,7 @@ function PokemonCard({pokemon} : PokemonCardProps) {
     const router = useRouter();
 
     const handleClick = () => {
-        router.push(`/name/${pokemon.name}`)
+        router.push(`/pokemon/${pokemon.id}`)
     }
     return ( 
         <Card isHoverable isPressable variant='bordered'  onClick={handleClick}>
